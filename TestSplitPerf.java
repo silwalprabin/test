@@ -11,42 +11,55 @@ public class TestSplitPerf
  
 	public static final void testSplit() {
 		double start = System.currentTimeMillis();
+        boolean isMatched = false;
 		for (int i = 0; i < RUNS; i++) {
 			splitArray = line.split(";");
+          if(splitArray.length > 1){
+            isMatched = true;
+          }
 		}
+        //System.out.println("isMatched; "+isMatched);
 		System.out.println("Split: " + (System.currentTimeMillis() - start) + "ms");
-        // System.out.println("splitArray; "+Arrays.toString(splitArray));
 	}
  
    public static final void testSplitRegex() {
 		double start = System.currentTimeMillis();
-     Pattern p = Pattern.compile(";");
+        boolean isMatched = false;
+        Pattern p = Pattern.compile(";");
 		for (int i = 0; i < RUNS; i++) {
 			splitArray = p.split(line);
+          	if(splitArray.length > 1){
+            	isMatched = true;
+          	}
 		}
+        // System.out.println("isMatched; "+isMatched);
 		System.out.println("Regex Split: " + (System.currentTimeMillis() - start) + "ms");
-        // System.out.println("splitArray; "+Arrays.toString(splitArray));
 	}
   
   public static final void testRegexMatcher() {
         double start = System.currentTimeMillis();
-	    Pattern p = Pattern.compile(";");
-        // System.out.println("splitArray Index; "+index);
-        //System.out.println(p.matcher(line).find());
+        boolean isMatched = false;
+        Pattern p = Pattern.compile(";");
+    	for (int i = 0; i < RUNS; i++) {
+          isMatched = p.matcher(line).find();
+        }
+        //System.out.println("isMatched; "+isMatched);
         System.out.println("RegexMatcher: " + (System.currentTimeMillis() - start) + "ms");
 
   }
   
 	public static final void testIndexOf() {
 		double start = System.currentTimeMillis();
-  		int index =0;
+        boolean isMatched = false;
+  	
 		for (int i = 0; i < RUNS; i++) {
-			index = line.indexOf(';'); 
+          if(line.indexOf(';')>=0){
+            isMatched = true;
+          }
 		}
       
-        // System.out.println("IndexOf: " + (System.currentTimeMillis() - start) + "ms");
+        // System.out.println("isMatched; "+isMatched);
         System.out.println("IndexOf: " + (System.currentTimeMillis() - start) + "ms");
-        // System.out.println("splitArray Index; "+index);
 
 	}
   
@@ -62,20 +75,20 @@ public class TestSplitPerf
 /*
 OUTPUT::
 1st run:
-Split: 419.0ms
-Regex Split: 520.0ms
-IndexOf: 9.0ms
-RegexMatcher: 0.0ms
+Split: 406.0ms
+Regex Split: 555.0ms
+IndexOf: 11.0ms
+RegexMatcher: 110.0ms
 
 2nd run:
-Split: 407.0ms
-Regex Split: 552.0ms
+Split: 401.0ms
+Regex Split: 495.0ms
 IndexOf: 10.0ms
-RegexMatcher: 0.0ms
+RegexMatcher: 73.0ms
 
 3rd run:
-Split: 397.0ms
-Regex Split: 514.0ms
+Split: 460.0ms
+Regex Split: 539.0ms
 IndexOf: 10.0ms
-RegexMatcher: 0.0ms
+RegexMatcher: 85.0ms
 */
