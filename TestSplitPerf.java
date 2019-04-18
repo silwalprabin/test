@@ -2,6 +2,7 @@
 // Performance test between split options
 //*******************************************************************
 import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 // one class needs to have a main() method
 public class TestSplitPerf
 {
@@ -36,17 +37,34 @@ public class TestSplitPerf
 		System.out.println("Regex Split: " + (System.currentTimeMillis() - start) + "ms");
 	}
   
-  public static final void testRegexMatcher() {
+  public static final void testRegexMatcherFind() {
         double start = System.currentTimeMillis();
         boolean isMatched = false;
-        Pattern p = Pattern.compile(";");
+        Pattern p = Pattern.compile("([^;|^,]+)");
     	for (int i = 0; i < RUNS; i++) {
           isMatched = p.matcher(line).find();
         }
         //System.out.println("isMatched; "+isMatched);
-        System.out.println("RegexMatcher: " + (System.currentTimeMillis() - start) + "ms");
+        System.out.println("RegexMatcherFind: " + (System.currentTimeMillis() - start) + "ms");
 
   }
+  
+  
+    public static final void testRegexMatcherMatches() {
+        double start = System.currentTimeMillis();
+        boolean isMatched = false;
+        Pattern p = Pattern.compile("([^;|^,]+)");
+    	for (int i = 0; i < RUNS; i++) {
+          Matcher matcher = p.matcher(line) ;
+          while (matcher.find()) {
+             // System.out.println(matcher.group());
+            isMatched = true;
+          }
+        }
+        //System.out.println("isMatched; "+isMatched);
+        System.out.println("RegexMatcher: " + (System.currentTimeMillis() - start) + "ms");
+
+  }  
   
 	public static final void testIndexOf() {
 		double start = System.currentTimeMillis();
@@ -68,27 +86,31 @@ public class TestSplitPerf
    		testSplit();
    		testSplitRegex();
   		testIndexOf();
-        testRegexMatcher();
+        testRegexMatcherFind();
+        testRegexMatcherMatches();
   	}
 }
 
 /*
 OUTPUT::
 1st run:
-Split: 406.0ms
-Regex Split: 555.0ms
-IndexOf: 11.0ms
-RegexMatcher: 110.0ms
+Split: 402.0ms
+Regex Split: 513.0ms
+IndexOf: 9.0ms
+RegexMatcherFind: 247.0ms
+RegexMatcher: 2309.0ms
 
 2nd run:
-Split: 401.0ms
-Regex Split: 495.0ms
+Split: 391.0ms
+Regex Split: 493.0ms
 IndexOf: 10.0ms
-RegexMatcher: 73.0ms
+RegexMatcherFind: 248.0ms
+RegexMatcher: 2273.0ms
 
 3rd run:
-Split: 460.0ms
-Regex Split: 539.0ms
-IndexOf: 10.0ms
-RegexMatcher: 85.0ms
+Split: 399.0ms
+Regex Split: 562.0ms
+IndexOf: 11.0ms
+RegexMatcherFind: 297.0ms
+RegexMatcher: 2284.0ms
 */
